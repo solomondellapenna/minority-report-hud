@@ -1,0 +1,55 @@
+bs_package_flags = -bs-package-name reprocessing-example
+src_root_dir = /Users/solomondellapenna/minority-report-hud
+bsc = /Users/solomondellapenna/minority-report-hud/node_modules/bs-platform/lib/bsc.exe
+bsb_helper = /Users/solomondellapenna/minority-report-hud/node_modules/bs-platform/lib/bsb_helper.exe
+warnings = -w -30-40+6+7+27+32..39+44+45+101
+bsc_flags = -bs-D BSB_BACKEND="bytecode" -nostdlib -I '/Users/solomondellapenna/minority-report-hud/node_modules/bs-platform/lib/ocaml' -no-alias-deps -color always
+ppx_flags = 
+bs_package_includes = -I /Users/solomondellapenna/minority-report-hud/node_modules/Reprocessing/lib/ocaml/bytecode
+bs_package_dev_includes = 
+namespace = 
+bsb_dir_group = 0
+ocaml_flags = -thread   -no-alias-deps   -color   always
+bs_super_errors_ocamlfind = -bs-super-errors
+bs_super_errors = -bs-super-errors
+external_deps_for_linking = -I /Users/solomondellapenna/minority-report-hud/node_modules/sdl2/lib/ocaml/bytecode -I /Users/solomondellapenna/minority-report-hud/node_modules/Tsdl/lib/ocaml/bytecode -I /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/ocaml/bytecode -I /Users/solomondellapenna/minority-report-hud/node_modules/Reasongl/lib/ocaml/bytecode -I /Users/solomondellapenna/minority-report-hud/node_modules/Reprocessing/lib/ocaml/bytecode
+ocamlc = /Users/solomondellapenna/minority-report-hud/node_modules/bs-platform/vendor/ocaml/ocamlc.opt
+ocamlopt = /Users/solomondellapenna/minority-report-hud/node_modules/bs-platform/vendor/ocaml/ocamlopt.opt
+ocamlfind = 
+ocamlfind_dependencies = 
+ocaml_dependencies = -add-ocaml-dependency bigarray -add-ocaml-dependency dynlink -add-ocaml-dependency nums -add-ocaml-dependency str -add-ocaml-dependency threads -add-ocaml-dependency unix
+open_flag = 
+bsb_helper_verbose = 
+bsc_group_1_includes = 
+bsc_group_2_includes = 
+refmt = /Users/solomondellapenna/minority-report-hud/node_modules/bs-platform/lib/refmt3.exe
+reason_react_jsx = 
+refmt_flags = --print binary
+bsc_lib_includes = -I /Users/solomondellapenna/minority-report-hud/node_modules/bs-platform/vendor/ocaml/lib/ocaml -I src
+rule build_ast_and_module_sets_from_re_gen_simple
+  command = ${bsc} -pp "${refmt} ${refmt_flags}" ${reason_react_jsx}  ${ppx_flags} ${bs_super_errors} ${warnings} ${bsc_flags} -c -o ${out} -bs-syntax-only -bs-simple-binary-ast -bs-binary-ast -impl ${in}
+  description = [34mBuilding[39m [2m${out}[22m
+build src/index.mlast : build_ast_and_module_sets_from_re_gen_simple $src_root_dir/src/index.re
+rule build_deps_bytecode
+  command = ${bsb_helper} ${namespace} -g ${bsb_dir_group} -MD-bytecode ${in}
+  description = [34mBuilding[39m [2m${out}[22m
+build src/index.mlast.d : build_deps_bytecode src/index.mlast
+rule build_cmo_cmi_bytecode
+  command = ${ocamlfind}${ocamlc} ${open_flag} ${bs_super_errors_ocamlfind} ${bs_package_includes} ${bsc_lib_includes} ${bsc_extra_includes} ${ocamlfind_dependencies} ${ocaml_flags} -o ${out} ${warnings} -g -c -intf-suffix .mliast_simple -impl ${in}_simple ${postbuild}
+  depfile = ${in}.d
+  description = [34mBuilding[39m [2m${out}[22m
+build src/index.cmo |  src/index.cmi : build_cmo_cmi_bytecode src/index.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src
+build src/IndexHot.mlast : build_ast_and_module_sets_from_re_gen_simple $src_root_dir/src/IndexHot.re
+build src/IndexHot.mlast.d : build_deps_bytecode src/IndexHot.mlast
+build src/IndexHot.cmo |  src/IndexHot.cmi : build_cmo_cmi_bytecode src/IndexHot.mlast
+  bsc_flags = $bsc_flags -bs-re-out -bs-super-errors
+  bs_package_flags = $bs_package_flags  -bs-package-output commonjs:lib/js/src
+rule linking_bytecode
+  command = ${bsb_helper} ${bsb_helper_verbose} ${ocaml_dependencies} ${warnings} ${namespace} -bs-main ${main_module} ${bs_super_errors} ${static_libraries} ${ocamlfind_dependencies} ${external_deps_for_linking} ${in} -link-bytecode ${out}
+  description = [34mBuilding[39m [2m${out}[22m
+build indexhot.byte : linking_bytecode  src/IndexHot.mlast src/index.mlast |  /Users/solomondellapenna/minority-report-hud/node_modules/sdl2/lib/ocaml/bytecode/lib.cma /Users/solomondellapenna/minority-report-hud/node_modules/Tsdl/lib/ocaml/bytecode/lib.cma /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/ocaml/bytecode/lib.cma /Users/solomondellapenna/minority-report-hud/node_modules/Reasongl/lib/ocaml/bytecode/lib.cma /Users/solomondellapenna/minority-report-hud/node_modules/Reprocessing/lib/ocaml/bytecode/lib.cma src/IndexHot.cmi src/index.cmi src/IndexHot.cmo src/index.cmo /Users/solomondellapenna/minority-report-hud/node_modules/Reasongl/lib/reasongl.o /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/glad.o /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/image_helper.o /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/stb_image_aug.o /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/image_DXT.o /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/SOIL.o /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/soil_wrapper.o /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/tgls_new.o /Users/solomondellapenna/minority-report-hud/node_modules/Tsdl/lib/tsdl_new.o /Users/solomondellapenna/minority-report-hud/node_modules/sdl2/libSDL2.a
+  main_module = IndexHot
+  static_libraries = -add-clib -ccopt -add-clib -framework -add-clib -ccopt -add-clib CoreFoundation -add-clib -ccopt -add-clib -framework -add-clib -ccopt -add-clib CoreAudio -add-clib -ccopt -add-clib -framework -add-clib -ccopt -add-clib AudioToolbox -add-clib -ccopt -add-clib -framework -add-clib -ccopt -add-clib CoreVideo -add-clib -ccopt -add-clib -framework -add-clib -ccopt -add-clib Cocoa -add-clib -ccopt -add-clib -framework -add-clib -ccopt -add-clib Carbon -add-clib -ccopt -add-clib -framework -add-clib -ccopt -add-clib IOKit -add-clib -ccopt -add-clib -lm -add-clib -ccopt -add-clib -liconv -add-clib -ccopt -add-clib -lobjc -add-clib /Users/solomondellapenna/minority-report-hud/node_modules/Reasongl/lib/reasongl.o -add-clib /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/glad.o -add-clib /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/image_helper.o -add-clib /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/stb_image_aug.o -add-clib /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/image_DXT.o -add-clib /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/SOIL.o -add-clib /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/soil_wrapper.o -add-clib /Users/solomondellapenna/minority-report-hud/node_modules/Tgls/lib/tgls_new.o -add-clib /Users/solomondellapenna/minority-report-hud/node_modules/Tsdl/lib/tsdl_new.o -add-clib /Users/solomondellapenna/minority-report-hud/node_modules/sdl2/libSDL2.a
+build build.ninja : phony  ||  src/IndexHot.mlast.d src/index.mlast.d

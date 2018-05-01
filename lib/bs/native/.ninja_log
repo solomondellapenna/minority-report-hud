@@ -1,0 +1,15 @@
+# ninja log v5
+0	28	1524686512	src/IndexHot.mlast	8577b7cdaf39313a
+0	28	1524686512	src/index.mlast	a2c1bed75e2b43f8
+28	36	1524686512	src/IndexHot.mlast.d	5adaed88b7c12584
+28	36	1524686512	src/index.mlast.d	711e31b36c5ac84e
+1	39	1524686512	src/IndexHot.cmx	dc86c1527afb5096
+1	39	1524686512	src/IndexHot.cmi	dc86c1527afb5096
+0	40	1524686512	src/index.cmx	b34d82dcf2fb79db
+0	40	1524686512	src/index.cmi	b34d82dcf2fb79db
+40	298	1524686513	index.native	cf4cb72bdb89d59a
+0	21	1524687031	src/index.mlast	a2c1bed75e2b43f8
+21	27	1524687031	src/index.mlast.d	711e31b36c5ac84e
+0	39	1524687031	src/index.cmx	b34d82dcf2fb79db
+0	39	1524687031	src/index.cmi	b34d82dcf2fb79db
+39	286	1524687031	index.native	cf4cb72bdb89d59a
